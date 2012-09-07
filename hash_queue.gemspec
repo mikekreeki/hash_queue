@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path('../lib/hash_queue/version', __FILE__)
+require File.expand_path('../lib/hash_queue', __FILE__)
 
 Gem::Specification.new do |gem|
   gem.authors       = ["Michal Krejci"]
@@ -9,6 +9,8 @@ Gem::Specification.new do |gem|
   gem.homepage      = ""
 
   gem.add_development_dependency('minitest')
+  gem.add_development_dependency('turn')
+  gem.add_development_dependency('redgreen')
   
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   gem.files         = `git ls-files`.split("\n")
