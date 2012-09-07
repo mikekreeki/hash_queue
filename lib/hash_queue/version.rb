@@ -1,0 +1,3 @@
+module HashQueue
+  VERSION = "0.0.1"
+end
