@@ -28,14 +28,18 @@ describe HashQueue::Hash do
       @hash_queue[:foo].must_be_instance_of HashQueue::Queue
     end
     
+    it 'should be able to queue stuff' do
+      @hash_queue.queue :foo, 1
+      @hash_queue.size.must_equal 1    
+    end
   end
   
   
   describe 'when we queue stuff' do
     before do
       @hash_queue = HashQueue::Hash.new
-      @hash_queue[:foo].queue :foo
-      @hash_queue[:bar].queue :bar
+      @hash_queue.queue :foo, true
+      @hash_queue.queue :bar, false
     end
     
     it 'shouldnt be empty' do
@@ -44,6 +48,23 @@ describe HashQueue::Hash do
   
     it 'should return correct size' do
       @hash_queue.size.must_equal 2
+    end
+    
+    it 'should return maintained keys' do
+      @hash_queue.keys.sort.must_equal [:foo, :bar].sort
+    end
+    
+    it 'should be able to clear itself' do
+      @hash_queue.clear
+      @hash_queue.size.must_equal 0
+      @hash_queue.keys.must_equal []
+    end
+    
+    it 'should be able to clean itself' do
+      @hash_queue[:foo].pop
+      @hash_queue.clean
+      @hash_queue.size.must_equal 1
+      @hash_queue.keys.must_equal [:bar]
     end
   end
   
@@ -92,6 +113,7 @@ describe HashQueue::Hash do
       end
       
     end
+  
   end
   
 

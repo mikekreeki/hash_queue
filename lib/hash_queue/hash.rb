@@ -14,6 +14,10 @@ module HashQueue
       end
     end
     
+    def queue(key, obj)
+      self[key].queue obj      
+    end
+    
     def pop(options = {})
       loop do
         results = pop_from_queues(options)
@@ -37,6 +41,26 @@ module HashQueue
     
     def empty?
       size.zero?
+    end
+    
+    def keys
+      @mutex.synchronize do 
+        @hash_queue.keys
+      end
+    end
+    
+    def clean
+      @mutex.synchronize do 
+        @hash_queue.reject! do |key, queue|
+          queue.empty?
+        end
+      end
+    end
+    
+    def clear
+      @mutex.synchronize do 
+        @hash_queue.clear
+      end
     end
     
     private
