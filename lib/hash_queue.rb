@@ -1,3 +1,10 @@
+require 'hash_queue/hash'
+require 'hash_queue/queue'
+
 module HashQueue
-  VERSION = "0.0.1"
+  extend self
+    
+  def new
+    Hash.new
+  end
 end
