@@ -1,9 +1,8 @@
 require 'spec_helper'
-require 'timeout'
+#require 'timeout'
 
 describe HashQueue do
   it 'should be able to create new HashQueue instance' do
-    HashQueue.new.wont_be_nil
     HashQueue.new.must_be_instance_of HashQueue::Hash
   end
 end
@@ -25,12 +24,17 @@ describe HashQueue::Hash do
   
     it 'should create Queues on the fly' do
       @hash_queue[:foo].queue 1
-      @hash_queue[:foo].must_be_instance_of HashQueue::Queue
+      @hash_queue.keys.size.must_equal 1
     end
     
     it 'should be able to queue stuff' do
       @hash_queue.queue :foo, 1
       @hash_queue.size.must_equal 1    
+    end
+    
+    it 'should be able to get Queue object when asked with a key' do
+      @hash_queue.get_queue(:foo).must_be_instance_of HashQueue::Queue
+      @hash_queue.get_queue(:non_existent).must_be_instance_of HashQueue::Queue
     end
   end
   
@@ -85,16 +89,20 @@ describe HashQueue::Hash do
     describe 'from non-empty HashQueue instance' do
       before do
         @hash_queue = HashQueue::Hash.new
-        @hash_queue[:foo].queue :foo
-        @hash_queue[:bar].queue :bar
+        @hash_queue[:foo].queue 1
+        @hash_queue[:foo].queue 2
+        @hash_queue[:bar].queue 3
+        @hash_queue[:bar].queue 4
       end
       
       it 'should return array of items, one from each queue' do
-        @hash_queue.pop.sort.must_equal [:foo, :bar].sort
+        @hash_queue.pop.sort.must_equal [1,3].sort
       end
       
+      it 'should return appropriate number of items from each queue when size option specified' do
+        @hash_queue.pop(size: 2).sort.must_equal [1,2,3,4]
+      end
       
-    
     end
   
     
@@ -116,6 +124,5 @@ describe HashQueue::Hash do
   
   end
   
-
 end
 

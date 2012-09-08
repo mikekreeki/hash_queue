@@ -7,16 +7,13 @@ module HashQueue
     end
     
     def [](key)
-      @mutex.synchronize do
-        @hash_queue.fetch(key) do
-          @hash_queue[key] = Queue.new
-        end
-      end
+      QueueProxy.new(self, key)
     end
     
     def queue(key, obj)
       self[key].queue obj      
     end
+    alias_method :enqueue, :queue
     
     def pop(options = {})
       loop do
@@ -38,6 +35,7 @@ module HashQueue
         end 
       end
     end
+    alias_method :count, :size
     
     def empty?
       size.zero?
@@ -63,15 +61,46 @@ module HashQueue
       end
     end
     
+    def get_queue(key)
+      @mutex.synchronize do 
+        @hash_queue.fetch(key) do
+          @hash_queue[key] = Queue.new
+        end
+      end
+    end
+    
     private
     
     def pop_from_queues(options)
+      options = options.dup
+      options.delete(:blocking)
+      
       @mutex.synchronize do
         @hash_queue.each_value.map do |queue|
           queue.pop(options)
         end.flatten.compact
       end
     end
+       
+  end
   
+  class QueueProxy
+    
+    [ :queue, :enqueue, :pop, :size, :count, :empty?, :clear, :lock, :unlock, 
+     :locked?, :unlock_all, :count_locks, :locks_count].each do |m|
+      define_method m do |*args|
+        subject.send m, *args
+      end
+    end
+
+    def initialize(parent, key)
+      @parent = parent
+      @key = key
+    end
+    
+    def subject
+      @parent.get_queue(@key)
+    end
+
   end
 end
