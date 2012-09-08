@@ -2,11 +2,11 @@
 require File.expand_path('../lib/hash_queue/version', __FILE__)
 
 Gem::Specification.new do |gem|
-  gem.authors       = ["Michal Krejci"]
+  gem.authors       = ["Michal Krejčí"]
   gem.email         = ["mikekreeki@gmail.com"]
-  gem.description   = %q{Threadsafe namespaced Queue with locking.}
-  gem.summary       = %q{Threadsafe namespaced Queue with locking.}
-  gem.homepage      = ""
+  gem.description   = %q{Threadsafe namespaced Queue with locking capabilities.}
+  gem.summary       = %q{Threadsafe namespaced Queue with locking capabilities.}
+  gem.homepage      = "http://github.com/mikekreeki/hash_queue"
 
   gem.add_development_dependency('minitest')
   gem.add_development_dependency('turn')
