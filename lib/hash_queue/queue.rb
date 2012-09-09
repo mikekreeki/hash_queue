@@ -16,6 +16,7 @@ module HashQueue
       end
     end
     alias_method :enqueue, :queue
+    alias_method :push, :queue
     
     def pop(options = {}, results = [])
       if options[:blocking] 

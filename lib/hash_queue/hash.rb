@@ -14,6 +14,7 @@ module HashQueue
       get_queue(key).queue obj      
     end
     alias_method :enqueue, :queue
+    alias_method :push, :queue
     
     def pop(options = {})
       loop do
@@ -86,7 +87,7 @@ module HashQueue
   
   class QueueProxy
     
-    [ :queue, :enqueue, :pop, :size, :count, :empty?, :clear, :lock, :unlock, 
+    [ :queue, :enqueue, :push, :pop, :size, :count, :empty?, :clear, :lock, :unlock, 
      :locked?, :unlock_all, :count_locks, :locks_count].each do |m|
       define_method m do |*args|
         subject.send m, *args

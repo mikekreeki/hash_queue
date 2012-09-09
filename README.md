@@ -48,7 +48,7 @@ hash_queue.queue :my_queue, Stuff.new
 
 Keys (or namespaces if you prefer) can be anything you want. Usually those will be symbols or strings but don't need to be. Objects, classes, numbers or even `true` or `nil` will work. Same applies for queued items.
 
-`#queue` is aliased as `#enqueue` for convenience on both hash_queue and individual queues.
+`#queue` is aliased as `#enqueue` and `#push` for convenience on both hash_queue and individual queues.
 
 ### Working with hash_queue as a whole
 
