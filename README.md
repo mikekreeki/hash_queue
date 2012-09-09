@@ -1,6 +1,6 @@
 # HashQueue
 
-Simple namespaced queueing system for highly concurrent environments. Maintains separate queues for different keys accessible from numerous threads without a trouble. Think of it as an extension to stdlib's Queue class, and it could be even used as a replacement. Features nice locking capabilities, read on.
+Simple namespaced queueing system for highly concurrent environments. Maintains separate queues for different keys accessible from numerous threads without a trouble. Think of it as an extension to stdlib's Queue class and it could be used as its replacement. Features nice locking capabilities, read on.
 
 ## Installation
 
