@@ -64,7 +64,7 @@ module HashQueue
         end
         
         result = if options.key? :size
-          @queue.shift(size - _count_locks)
+          @queue.shift(size - _count_locks).compact
         else
           @queue.shift
         end

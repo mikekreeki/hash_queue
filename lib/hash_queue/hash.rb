@@ -11,7 +11,7 @@ module HashQueue
     end
     
     def queue(key, obj)
-      self[key].queue obj      
+      get_queue(key).queue obj      
     end
     alias_method :enqueue, :queue
     
