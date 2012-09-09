@@ -1,6 +1,6 @@
 # HashQueue
 
-Simple namespaced queueing system for highly concurrent environments. Maintains separate queues for different keys accessible from numerous threads without a trouble. Think of it as an extension to stdlib's Queue class and it could be used as its replacement. Features nice locking capabilities, read on.
+Simple namespaced Queue for highly concurrent environments. Maintains separate queues for different keys accessible from numerous threads without a trouble. Think of it as an extension to stdlib's Queue class. It could be even used as its replacement. Features nice locking capabilities, read on.
 
 ## Installation
 
@@ -56,7 +56,7 @@ HashQueue instances offer some handy methods.
 
 ##### size 
 
-Returns combined sizes of all queues managed
+Returns combined sizes of all queues managed.
 
 ```ruby
 hash_queue = HashQueue.new
@@ -90,7 +90,7 @@ hash_queue.empty? # => true
 
 ##### clean
 
-When using lots of different keys (e.g. hostnames) your hash_queue will eventually grow in size. `#clean` removes empty queues to save precious RAM. It's just a maintenance method, it won't break anything, you can use individual queues later the same way you're doing now, they will be automatically redeclared when you touch them.
+When using lots of different keys (e.g. hostnames) your HashQueue instance will eventually grow in size. `#clean` removes empty queues to save precious RAM and speed things up. It's just a maintenance method, it won't break anything, you can use individual queues later the same way you're doing now, they will be automatically redeclared when you touch them.
 
 ##### keys 
 
@@ -114,7 +114,7 @@ hash_queue[:my_queue]
 
 It also features some not that fancy methods like `#size`, `#empty?` and `#clear`. 
 
-It's also possible to bypass namespacing capabilities and use HashQueue's individual queue directly as a replacement for stdlib's Queue. Just initialize new queue.
+It's also possible to bypass namespacing capabilities and use HashQueue's individual queue directly as a replacement for stdlib's Queue. Just initialize new queue:
 
 ```ruby
 queue = HashQueue::Queue.new
@@ -126,7 +126,7 @@ queue.empty? # => true
 
 ### Popping stuff out of the queues
 
-There are two way to pop stuff from hash_queue. One way is to pop from all the queues at once. When you call `pop` on hash_queue instance it will pop one item from each individual queue it manages (unless it's locked). Always returns an Array.
+There are two way to pop stuff from HashQueue instance. One way is to pop from all the queues at once. When you call `pop` on HashQueue instance it will pop one item from each individual queue it manages (unless it's locked). Always returns an Array.
 
 ```ruby
 hash_queue = HashQueue.new
@@ -136,13 +136,12 @@ hash_queue.queue :rubyists, :tenderlove
 hash_queue.queue :rubyists, :yehuda
 hash_queue.queue :rubyists, :matz
 
-
 hash_queue.pop # => [:cat, :tenderlove]
 hash_queue.pop # => [:dog, :yehuda]
 hash_queue.pop # => [:matz]
 ```
 
-`#pop` method takes optional `:size` option with which you can specify how much items you want to pop out of each queue.
+`#pop` method takes optional `:size` option with which you can specify how many items you want to pop out of each queue.
 
 ```ruby
 hash_queue = HashQueue.new
@@ -207,7 +206,7 @@ hash_queue[:foo].unlock
 hash_queue[:foo].pop # => #<Object:0x000001008a5bf0>
 ```
 
-Both `#lock` and `#unlock` take as an argument number of locks you want to put or remove from the queue. Defaults to `1`. There's even a convenient `#unlock_all` method and `#count_locks` that returns current number of locks placed on the queue. You can always check whether the queue is locked with `#locked?`.
+Both `#lock` and `#unlock` take as an argument number of locks you want to put or remove from the queue. Defaults to `1`. There's even a convenient `#unlock_all` method and `#count_locks` that returns current number of locks placed on the queue. You can always check whether a specific queue is locked with `#locked?`.
 
 ```ruby
 hash_queue[:foo].lock
