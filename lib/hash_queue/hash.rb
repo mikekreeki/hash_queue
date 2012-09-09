@@ -22,7 +22,7 @@ module HashQueue
         
         if options[:blocking] 
           return results unless results.empty?
-          sleep 0.1
+          sleep 0.01
         else
           return results
         end

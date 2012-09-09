@@ -24,7 +24,7 @@ module HashQueue
           result = _pop(options, results)
           
           return result unless result.nil? or result == [] 
-          sleep 0.1
+          sleep 0.01
         end
       else
         _pop(options,results)
