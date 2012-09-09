@@ -28,6 +28,7 @@ module HashQueue
         end
       end
     end
+    alias_method :shift, :pop
     
     def size
       @mutex.synchronize do
@@ -37,6 +38,7 @@ module HashQueue
       end
     end
     alias_method :count, :size
+    alias_method :length, :size
     
     def empty?
       size.zero?
