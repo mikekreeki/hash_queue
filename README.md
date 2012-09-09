@@ -1,6 +1,6 @@
 # HashQueue
 
-Simple namespaced queueing system for highly concurrent environments. Maintains separate queues for different keys accessible from numerous threads without a trouble. Think of it as an extension to stdlib's Queue class, and it could be even used as a drop-in replacement. Features nice locking capabilities, read on.
+Simple namespaced queueing system for highly concurrent environments. Maintains separate queues for different keys accessible from numerous threads without a trouble. Think of it as an extension to stdlib's Queue class, and it could be even used as a replacement. Features nice locking capabilities, read on.
 
 ## Installation
 
@@ -114,7 +114,7 @@ hash_queue[:my_queue]
 
 It also features some not that fancy methods like `#size`, `#empty?` and `#clear`. 
 
-It's also possible to bypass namespacing capabilities and use HashQueue's individual queue directly as a drop-in replacement for stdlib's Queue. Just initialize new queue.
+It's also possible to bypass namespacing capabilities and use HashQueue's individual queue directly as a replacement for stdlib's Queue. Just initialize new queue.
 
 ```ruby
 queue = HashQueue::Queue.new
