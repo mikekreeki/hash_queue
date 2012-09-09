@@ -6,7 +6,7 @@ Simple namespaced  queueing system for highly concurrent environments. Maintains
 
 Add this line to your application's Gemfile:
 
-    gem 'hash_queue'
+    gem 'hash_queue', '~> 0.1'
 
 And then execute:
 
@@ -197,7 +197,7 @@ hash_queue[:foo].unlock
 hash_queue[:foo].pop # => #<Object:0x000001008a5bf0>
 ```
 
-Both `#lock` and `#unlock` take as an argument number of locks you want to put or remove from the queue. There's even a convenient `#unlock_all` method and `#count_locks` that returns current number of locks placed on the queue. You can always check whether the queue is locked with `#locked?`.
+Both `#lock` and `#unlock` take as an argument number of locks you want to put or remove from the queue. Defaults to `1`. There's even a convenient `#unlock_all` method and `#count_locks` that returns current number of locks placed on the queue. You can always check whether the queue is locked with `#locked?`.
 
 ```ruby
 hash_queue[:foo].lock
