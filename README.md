@@ -46,7 +46,7 @@ hash_queue[:my_queue].queue Stuff.new
 hash_queue.queue :my_queue, Stuff.new
 ```
 
-Keys (or namespaces if you prefer) can be anything you want. Usually those will be symbols or strings but don't need to be. Objects, classes, numbers or even `true` or `nil` will work. For values please don't use `nil` or an empty array for now (check Gotchas).
+Keys (or namespaces if you prefer) can be anything you want. Usually those will be symbols or strings but don't need to be. Objects, classes, numbers or even `true` or `nil` will work. Same applies for queued items.
 
 `#queue` is aliased as `#enqueue` for convenience on both hash_queue and individual queues.
 
@@ -227,11 +227,6 @@ it 'should allow you to pop items even if locked when you want more items then t
   @hash_queue[:foo].pop(size: 10).size.must_equal 8
 end
 ```
-## Gotchas
-
-##### Queueing `nil` or an empty array
-
-For now, please avoid it. The thing with `nil` is that HashQueue doesn't have implemented mechanism to find out whether `nil` popped from a queue is `nil` you queued in there or just a result of popping from an empty queue (in technical speech `[nil].shift` and `[].shift` both return `nil`). Queuing `nil` may be useful in some cases though, because it would be successful one pop but it wouldn't appear in array returned. Similar thing goes with `[]`.  
 
 ## Acknowledgements
 

@@ -85,6 +85,33 @@ describe HashQueue::Hash do
     end
   end
   
+  describe 'when we queue weird stuff' do
+    before do
+      @hash_queue = HashQueue::Hash.new
+    end
+    
+    describe 'like nil' do
+      before do
+        @hash_queue.queue :foo, nil
+      end
+      
+      it 'should return nil when popping' do
+        @hash_queue.pop.must_equal [nil]
+      end
+    end
+    
+    describe 'like an empty array' do
+      before do
+        @hash_queue.queue :foo, []
+      end
+      
+      it 'should return an empty array when popping' do
+        @hash_queue.pop.must_equal [[]]
+      end
+    end
+  
+  end
+  
   describe 'when popping' do
     
     describe 'from empty HashQueue instance' do

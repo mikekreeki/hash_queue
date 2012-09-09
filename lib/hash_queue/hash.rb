@@ -78,7 +78,7 @@ module HashQueue
       @mutex.synchronize do
         @hash_queue.each_value.each_with_object([]) do |queue, results|
           queue.pop(options,results)
-        end.compact
+        end
       end
     end
        

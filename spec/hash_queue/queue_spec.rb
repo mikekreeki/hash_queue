@@ -54,6 +54,31 @@ describe HashQueue::Queue do
     end
   end
   
+  describe 'when we queue weird stuff' do
+     describe 'like nil' do
+       before do
+         3.times { @queue.queue nil }
+       end
+
+       it 'should return nil when popping' do
+         @queue.pop.must_equal nil
+         @queue.pop(size: 2).must_equal [nil, nil]
+       end
+     end
+
+     describe 'like an empty array' do
+       before do
+         3.times { @queue.queue [] }
+       end
+
+       it 'should return an empty array when popping' do
+         @queue.pop.must_equal []
+         @queue.pop(size: 2).must_equal [[], []]
+       end
+     end
+
+   end
+  
   describe 'when popping with blocking option' do
     it 'should wait until some results are available' do
       Thread.new {
