@@ -76,9 +76,9 @@ module HashQueue
       options.delete(:blocking)
       
       @mutex.synchronize do
-        @hash_queue.each_value.map do |queue|
-          queue.pop(options)
-        end.flatten.compact
+        @hash_queue.each_value.each_with_object([]) do |queue, results|
+          queue.pop(options,results)
+        end.compact
       end
     end
        

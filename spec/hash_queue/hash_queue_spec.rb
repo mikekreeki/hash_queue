@@ -73,6 +73,18 @@ describe HashQueue::Hash do
   end
   
   
+  describe 'when we queue an array' do
+    before do
+      @hash_queue = HashQueue::Hash.new
+      @hash_queue.queue :foo, [1]
+      @hash_queue.queue :bar, [2]
+    end
+    
+    it 'should return array values' do
+      @hash_queue.pop.sort.must_equal [[1],[2]].sort
+    end
+  end
+  
   describe 'when popping' do
     
     describe 'from empty HashQueue instance' do

@@ -17,16 +17,16 @@ module HashQueue
     end
     alias_method :enqueue, :queue
     
-    def pop(options = {})
+    def pop(options = {}, results = [])
       if options[:blocking] 
         loop do 
-          result = _pop(options)
+          result = _pop(options, results)
           
           return result unless result.nil? or result == [] 
           sleep 0.1
         end
       else
-        _pop(options)
+        _pop(options,results)
       end
     end
     
@@ -39,7 +39,7 @@ module HashQueue
     
     def empty?
       @mutex.synchronize do
-        @queue.empty?
+        _empty?
       end
     end
     
@@ -51,7 +51,7 @@ module HashQueue
     
     private
     
-    def _pop(options)
+    def _pop(options,results)
       @mutex.synchronize do
         size = options.fetch(:size, 1)
         
@@ -62,17 +62,24 @@ module HashQueue
             return nil
           end
         end
-        
-        result = if options.key? :size
-          @queue.shift(size - _count_locks).compact
-        else
-          @queue.shift
+              
+        (size - _count_locks).times do
+          break if _empty?
+          results.push @queue.shift
+          _lock if options[:lock]
         end
         
-        _lock(Array(result).size) if options[:lock]
-        result
+        if options.key? :size 
+          results
+        else
+          results[0]
+        end
       end      
     end 
+    
+    def _empty?
+      @queue.empty?
+    end
       
   end
 end
