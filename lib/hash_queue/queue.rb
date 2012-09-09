@@ -17,6 +17,7 @@ module HashQueue
     end
     alias_method :enqueue, :queue
     alias_method :push, :queue
+    alias_method :<<, :queue
     
     def pop(options = {}, results = [])
       if options[:blocking] 
@@ -30,6 +31,7 @@ module HashQueue
         _pop(options,results)
       end
     end
+    alias_method :shift, :pop
     
     def size
       @mutex.synchronize do
@@ -37,6 +39,7 @@ module HashQueue
       end
     end
     alias_method :count, :size
+    alias_method :length, :size
     
     def empty?
       @mutex.synchronize do
