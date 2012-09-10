@@ -12,6 +12,16 @@ describe HashQueue::Queue do
       @queue.size.must_equal 0
     end
     
+    it 'should be able to queue stuff' do
+      @queue.queue :foo
+      @queue.size.must_equal 1
+    end
+    
+    it 'should be to queue stuff in batches' do
+      @queue.queue_many :foo, :bar, :xyz
+      @queue.size.must_equal 3
+    end
+    
   end
   
   describe 'when queued stuff' do

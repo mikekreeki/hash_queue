@@ -19,6 +19,14 @@ module HashQueue
     alias_method :push, :queue
     alias_method :<<, :queue
     
+    def queue_many(*objs)
+      @mutex.synchronize do
+        @queue.concat objs
+      end
+    end
+    alias_method :enqueue_many, :queue_many
+    alias_method :push_many, :queue_many
+    
     def pop(options = {}, results = [])
       if options[:blocking] 
         loop do 

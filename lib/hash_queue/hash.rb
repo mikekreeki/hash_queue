@@ -89,8 +89,9 @@ module HashQueue
   
   class QueueProxy
     
-    [ :queue, :enqueue, :push, :<<, :pop, :shift, :size, :count, :length, :empty?, :clear, :lock, :unlock, 
-     :locked?, :unlock_all, :count_locks, :locks_count].each do |m|
+    [ :queue, :enqueue, :push, :<<, :queue_many, :enqueue_many, :push_many, 
+      :pop, :shift, :size, :count, :length, :empty?, :clear, :lock, :unlock, 
+      :locked?, :unlock_all, :count_locks, :locks_count].each do |m|
       define_method m do |*args|
         subject.send m, *args
       end
