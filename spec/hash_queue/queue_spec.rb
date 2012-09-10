@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'timeout'
 
 describe HashQueue::Queue do
   before do

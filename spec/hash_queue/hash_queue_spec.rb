@@ -158,6 +158,15 @@ describe HashQueue::Hash do
         @hash_queue.pop(blocking: true).wont_be_empty
       end
       
+      it 'should work as expected when an empty array is queued' do
+        Thread.new {
+          sleep 0.5
+          @hash_queue[:foo].queue []
+        }   
+        
+        Timeout::timeout(0.7) { @hash_queue.pop(blocking: true).must_equal [[]] }
+      end
+      
     end
   
   end
