@@ -75,9 +75,11 @@ hash_queue.queue :favourite_rubies, 'rubinius'
 hash_queue.size  # => 2
 ```
 
+Also aliased as `#count` and `#length`.
+
 ##### empty?
 
-Returns `true` or `false` whether hash_queue is empty or not.
+Returns `true` or `false` whether HashQueue instance is empty or not.
 
 ```ruby
 hash_queue = HashQueue.new
