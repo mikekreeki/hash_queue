@@ -46,9 +46,19 @@ hash_queue[:my_queue].queue Stuff.new
 hash_queue.queue :my_queue, Stuff.new
 ```
 
+You can also queue multiple items in a single method call:
+
+```ruby
+hash_queue[:my_queue].queue_many :foo, :bar, :xyz
+
+# Ruby itself provides some handy magic syntax for expanding arrays into arguments. The result is identical.
+stuff = [:foo, :bar, :xyz]
+hash_queue[:my_queue].queue_many *stuff
+```
+
 Keys (or namespaces if you prefer) can be anything you want. Usually those will be symbols or strings but don't need to be. Objects, classes, numbers or even `true` or `nil` will work. Same applies for queued items (but beware if you don't pop with `:size` option, you logically won't be able to distinguish if `nil` you get back is `nil` you queued there or just null return value of popping from an empty queue)
 
-`#queue` is aliased as `#enqueue` and `#push` for convenience on both hash_queue and individual queues.
+`#queue` is aliased as `#enqueue`, `#push` and `#<<` for convenience. `#queue_many` is aliased as `#enqueue_many` and `#push_many` accordingly.
 
 ### Working with hash_queue as a whole
 
