@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'timeout'
 
 describe HashQueue::Queue do
   before do
@@ -97,6 +98,26 @@ describe HashQueue::Queue do
       }   
            
       @queue.pop(blocking: true, size: 1).wont_be_empty
+    end
+    
+    it 'should handle nil in queue' do
+      Thread.new {
+        sleep 0.5
+        @queue.queue_many nil, nil
+      }   
+      
+      Timeout::timeout(0.7) { @queue.pop(blocking: true).must_equal nil }
+      Timeout::timeout(0.7) { @queue.pop(blocking: true, size: 1).must_equal [nil] }
+    end
+    
+    it 'should handle empty array in queue' do
+      Thread.new {
+        sleep 0.5
+        @queue.queue_many [], []
+      }   
+      
+      Timeout::timeout(0.7) { @queue.pop(blocking: true).must_equal [] }
+      Timeout::timeout(0.7) { @queue.pop(blocking: true, size: 1).must_equal [[]] }
     end
     
   end

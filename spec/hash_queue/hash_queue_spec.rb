@@ -1,5 +1,4 @@
 require 'spec_helper'
-#require 'timeout'
 
 describe HashQueue do
   it 'should be able to create new HashQueue instance' do

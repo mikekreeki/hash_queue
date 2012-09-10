@@ -8,11 +8,14 @@ module HashQueue
       @mutex = Mutex.new 
       @queue = []
       @locks = []
+      @waiting = []
     end
     
     def queue(obj)
       @mutex.synchronize do
         @queue.push obj
+        
+        wake_waiting unless @waiting.empty?
       end
     end
     alias_method :enqueue, :queue
@@ -22,21 +25,23 @@ module HashQueue
     def queue_many(*objs)
       @mutex.synchronize do
         @queue.concat objs
+        
+        wake_waiting unless @waiting.empty?
       end
     end
     alias_method :enqueue_many, :queue_many
     alias_method :push_many, :queue_many
     
     def pop(options = {}, results = [])
-      if options[:blocking] 
-        loop do 
-          result = _pop(options, results)
-          
-          return result unless result.nil? or result == [] 
-          sleep 0.01
+      @mutex.synchronize do
+        loop do
+          if options[:blocking] and _empty?
+            @waiting.push Thread.current
+            @mutex.sleep
+          else
+            return _pop(options,results)
+          end
         end
-      else
-        _pop(options,results)
       end
     end
     alias_method :shift, :pop
@@ -64,33 +69,37 @@ module HashQueue
     private
     
     def _pop(options,results)
-      @mutex.synchronize do
-        size = options.fetch(:size, 1)
-        
-        if _locked? and _count_locks >= size
-          if options.key? :size
-            return [] 
-          else
-            return nil
-          end
-        end
-              
-        (size - _count_locks).times do
-          break if _empty?
-          results.push @queue.shift
-          _lock if options[:lock]
-        end
-        
-        if options.key? :size 
-          results
+      size = options.fetch(:size, 1)
+      
+      if _locked? and _count_locks >= size
+        if options.key? :size
+          return [] 
         else
-          results[0]
+          return nil
         end
-      end      
+      end
+            
+      (size - _count_locks).times do
+        break if _empty?
+        results.push @queue.shift
+        _lock if options[:lock]
+      end
+      
+      if options.key? :size 
+        results
+      else
+        results[0]
+      end
     end 
     
     def _empty?
       @queue.empty?
+    end
+    
+    def wake_waiting
+      @waiting.shift.wakeup
+    rescue ThreadError
+      retry
     end
       
   end
