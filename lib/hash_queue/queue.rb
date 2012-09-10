@@ -11,9 +11,9 @@ module HashQueue
       @waiting = []
     end
     
-    def queue(obj)
+    def queue(*objs)
       @mutex.synchronize do
-        @queue.push obj
+        @queue.concat objs
         
         wake_waiting unless @waiting.empty?
       end
@@ -21,16 +21,9 @@ module HashQueue
     alias_method :enqueue, :queue
     alias_method :push, :queue
     alias_method :<<, :queue
-    
-    def queue_many(*objs)
-      @mutex.synchronize do
-        @queue.concat objs
-        
-        wake_waiting unless @waiting.empty?
-      end
-    end
-    alias_method :enqueue_many, :queue_many
-    alias_method :push_many, :queue_many
+    alias_method :queue_many, :queue
+    alias_method :enqueue_many, :queue
+    alias_method :push_many, :queue
     
     def pop(options = {}, results = [])
       @mutex.synchronize do
