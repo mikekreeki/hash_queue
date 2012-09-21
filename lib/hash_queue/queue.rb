@@ -39,6 +39,12 @@ module HashQueue
     end
     alias_method :shift, :pop
     
+    def peek
+      @mutex.synchronize do
+        @queue[0]
+      end
+    end
+    
     def size
       @mutex.synchronize do
         @queue.size

@@ -189,6 +189,18 @@ hash_queue[:foo].pop(size: 2) # => [#<Object:0x000001008ae228>, #<Object:0x00000
 
 You can use same options as mentioned above.
 
+##### peek
+
+Use `#peek` to look what is in the head of the queue but without removing it from there.
+
+```ruby
+queue = HashQueue::Queue.new
+queue.push :foo
+
+queue.peek # => 
+queue.size # => 1
+```
+
 ### Locking capabilities
 
 HashQueue was designed for a specific use case and for that it provides a flexible locking facility.

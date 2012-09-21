@@ -62,6 +62,11 @@ describe HashQueue::Queue do
      @queue.clear
      @queue.pop(size: 1).must_equal []
     end
+    
+    it 'should be able to peek in the queue' do
+      @queue.peek.must_equal 1
+      @queue.size.must_equal 2
+    end
   end
   
   describe 'when we queue weird stuff' do
