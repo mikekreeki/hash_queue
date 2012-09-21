@@ -8,7 +8,7 @@ require 'rake/testtask'
 Rake::TestTask.new do |t|
   t.libs << 'spec'
   t.pattern = 'spec/**/*_spec.rb'
-  t.verbose = true
+  t.verbose = false
 end
 
 desc "Run tests"

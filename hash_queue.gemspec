@@ -9,8 +9,7 @@ Gem::Specification.new do |gem|
   gem.homepage      = "http://github.com/mikekreeki/hash_queue"
 
   gem.add_development_dependency('minitest')
-  gem.add_development_dependency('turn')
-  gem.add_development_dependency('term-ansicolor')
+  gem.add_development_dependency('minitest-reporters')
   
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   gem.files         = `git ls-files`.split("\n")
