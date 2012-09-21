@@ -1,4 +1,5 @@
 require 'hash_queue/queue/lockable'
+require 'ostruct'
 
 module HashQueue
   class Queue
@@ -15,7 +16,7 @@ module HashQueue
       @mutex.synchronize do
         @queue.concat objs
         
-        wake_waiting unless @waiting.empty?
+        wake_waiting
       end
     end
     alias_method :enqueue, :queue
@@ -28,8 +29,8 @@ module HashQueue
     def pop(options = {}, results = [])
       @mutex.synchronize do
         loop do
-          if options[:blocking] and _empty?
-            @waiting.push Thread.current
+          if options[:blocking] and not can_pop?(options[:size] || 1)
+            @waiting.push OpenStruct.new(thread: Thread.current, pop_size: options[:size] || 1) 
             @mutex.sleep
           else
             if block_given?
@@ -80,7 +81,7 @@ module HashQueue
     def _pop(options,results)
       size = options.fetch(:size, 1)
       
-      if _locked? and _count_locks >= size
+      unless can_pop?(size)
         if options.key? :size
           return [] 
         else
@@ -107,7 +108,6 @@ module HashQueue
       else
         @queue[0]
       end
-
     end
     
     def _empty?
@@ -115,9 +115,21 @@ module HashQueue
     end
     
     def wake_waiting
-      @waiting.shift.wakeup
-    rescue ThreadError
-      retry
+      unless @waiting.empty?
+        while @waiting[0] and can_pop? @waiting[0].pop_size
+          begin
+            @waiting.shift.thread.wakeup
+          rescue ThreadError
+            retry
+          end
+        end
+      end
+    end
+    
+    def can_pop?(size)   
+      size = @queue.size if size > @queue.size
+
+      (not _empty?) and (size > _count_locks)
     end
       
   end

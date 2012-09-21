@@ -10,6 +10,8 @@ module HashQueue
     def unlock(n = 1)
       @mutex.synchronize do
         @locks.shift(n)
+        
+        wake_waiting
       end
     end
     
@@ -22,6 +24,8 @@ module HashQueue
     def unlock_all
       @mutex.synchronize do
         @locks.clear
+        
+        wake_waiting
       end
     end
     

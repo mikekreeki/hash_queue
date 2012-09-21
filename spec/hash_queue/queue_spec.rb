@@ -128,6 +128,43 @@ describe HashQueue::Queue do
       @queue.pop(blocking: true, size: 1).wont_be_empty
     end
     
+    it 'should return appropriate number of items when locked and size is specified' do
+      @queue.lock 1
+      
+      Thread.new {
+        sleep 0.5       
+        @queue.queue :foo
+        @queue.queue :bar
+      }
+      
+      Timeout::timeout(0.7) { @queue.pop(blocking: true, size: 2).must_equal [:foo] }
+    end 
+    
+    it 'should wait until queue is unlocked' do
+      @queue.push :foo, :bar, :xyz
+      @queue.lock 3
+      
+      Thread.new {
+        sleep 0.5
+        @queue.unlock
+        sleep 0.5
+        @queue.unlock_all
+      }
+
+      Timeout::timeout(0.7) { @queue.pop(blocking: true, size: 3).must_equal [:foo] }
+      Timeout::timeout(0.7) { @queue.pop(blocking: true, size: 3).must_equal [:bar, :xyz] }
+    end
+    
+    it 'should wake multiple threads if necessary' do
+      threads = []
+      threads << Thread.new { sleep 0.1; @queue.pop(blocking: true).must_equal :foo }
+      threads << Thread.new { sleep 0.2; @queue.pop(blocking: true).must_equal :bar }
+      
+      sleep 0.1
+      @queue.push :foo, :bar
+      Timeout::timeout(0.7) { threads.map(&:join) }
+    end
+    
     it 'should handle nil in queue' do
       Thread.new {
         sleep 0.5
