@@ -197,9 +197,11 @@ Use `#peek` to look what is in the head of the queue but without removing it fro
 queue = HashQueue::Queue.new
 queue.push :foo
 
-queue.peek # => 
+queue.peek # => :foo
 queue.size # => 1
 ```
+
+You can peek on more items in the head of the queue specifying `:size` option. Be aware, using `#peek` your code might be subject to race condition. If you want to pop only when some condition is met, use `#pop` with a block mentioned above.
 
 ### Locking capabilities
 

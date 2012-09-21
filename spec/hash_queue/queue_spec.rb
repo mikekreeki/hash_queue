@@ -62,9 +62,14 @@ describe HashQueue::Queue do
      @queue.clear
      @queue.pop(size: 1).must_equal []
     end
-    
+      
     it 'should be able to peek in the queue' do
       @queue.peek.must_equal 1
+      @queue.size.must_equal 2
+    end
+    
+    it 'should be able to peek on batch of items' do
+      @queue.peek(size: 2).must_equal [1,2]
       @queue.size.must_equal 2
     end
   end

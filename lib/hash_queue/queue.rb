@@ -39,9 +39,9 @@ module HashQueue
     end
     alias_method :shift, :pop
     
-    def peek
+    def peek(options = {})
       @mutex.synchronize do
-        @queue[0]
+        _peek(options)
       end
     end
     
@@ -90,6 +90,15 @@ module HashQueue
         results[0]
       end
     end 
+    
+    def _peek(options)
+      if options.has_key? :size
+        @queue[0..options[:size]]
+      else
+        @queue[0]
+      end
+
+    end
     
     def _empty?
       @queue.empty?
