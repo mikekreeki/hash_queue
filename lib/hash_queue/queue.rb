@@ -32,7 +32,17 @@ module HashQueue
             @waiting.push Thread.current
             @mutex.sleep
           else
-            return _pop(options,results)
+            if block_given?
+              should_pop = yield _peek(options)
+              
+              if should_pop
+                return _pop(options,results)
+              else
+                return 
+              end
+            else
+              return _pop(options,results)
+            end
           end
         end
       end

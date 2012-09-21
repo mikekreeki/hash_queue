@@ -62,7 +62,26 @@ describe HashQueue::Queue do
      @queue.clear
      @queue.pop(size: 1).must_equal []
     end
+    
+    it 'should yeild items in the block passed to #pop' do
+      @queue.pop { |item| item.must_equal 1 }
+      @queue.pop(size: 1) { |items| items.must_equal [2] }
+    end
+    
+    it 'should pop when block passed to #pop evaluates to truthy value' do
+      item = @queue.pop do
+        true
+      end
       
+      item.must_equal 1
+    end
+    
+    it 'shouldnt pop when block passed to #pop evaluates to falsy value' do
+      item = @queue.pop {}
+      
+      item.must_be_nil
+    end
+    
     it 'should be able to peek in the queue' do
       @queue.peek.must_equal 1
       @queue.size.must_equal 2

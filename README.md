@@ -187,7 +187,16 @@ hash_queue[:foo].pop # => #<Object:0x000001008d4658>
 hash_queue[:foo].pop(size: 2) # => [#<Object:0x000001008ae228>, #<Object:0x000001008ae200>]
 ```
 
-You can use same options as mentioned above.
+You can use same options as mentioned above plus you can pass in a block into play. Block passed to `HashQueue::Queue#pop` yields items that otherwise would be directly returned, e.g. popped from the queue, and method actually pops values only if return value of a block evaluates to true.
+
+```ruby
+food = HashQueue::Queue.new
+food.push :carrot
+
+food.pop do |snack|
+  current_user.favors? snack
+end
+```
 
 ##### peek
 
