@@ -22,7 +22,7 @@ For those living on the edge:
     
 ..with Bundler 1.1 or newer:
 
-    gem 'mimi', github: 'mikekreeki/hash_queue'
+    gem 'hash_queue', github: 'mikekreeki/hash_queue'
 
 ## Usage
 
